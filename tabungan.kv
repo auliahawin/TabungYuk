@@ -1,0 +1,497 @@
+#:import dp kivy.metrics.dp
+
+
+<MainButton@Button>:
+    background_normal: ""
+    background_color: 0.58, 0.38, 0.82, 1
+    color: 1, 1, 1, 1
+    bold: True
+    size_hint_y: None
+    height: dp(48)
+
+
+<InputBox@TextInput>:
+    multiline: False
+    background_normal: ""
+    background_active: ""
+    background_color: 1, 1, 1, 1
+    foreground_color: 0.25, 0.20, 0.32, 1
+    hint_text_color: 0.55, 0.48, 0.62, 1
+    padding: dp(12)
+    size_hint_y: None
+    height: dp(48)
+
+
+<NavButton@Button>:
+    background_normal: ""
+    background_color: 0.91, 0.86, 0.97, 1
+    color: 0.40, 0.25, 0.62, 1
+    bold: True
+    font_size: "11sp"
+
+
+<LoginScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 0.94, 0.91, 0.98, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(25)
+        spacing: dp(12)
+
+        Widget:
+
+        Label:
+            text: "TABUNGYUK"
+            color: 0.45, 0.27, 0.68, 1
+            font_size: "28sp"
+            bold: True
+            size_hint_y: None
+            height: dp(55)
+
+        Label:
+            text: "Login ke Account"
+            color: 0.25, 0.20, 0.32, 1
+            font_size: "18sp"
+            size_hint_y: None
+            height: dp(35)
+
+        InputBox:
+            id: username
+            hint_text: "Username"
+
+        InputBox:
+            id: password
+            hint_text: "Password"
+            password: True
+
+        MainButton:
+            text: "LOGIN"
+            on_release: root.login()
+
+        Button:
+            text: "Belum punya account? Daftar"
+            background_normal: ""
+            background_color: 0, 0, 0, 0
+            color: 0.45, 0.27, 0.68, 1
+            size_hint_y: None
+            height: dp(42)
+            on_release: root.register()
+
+        Widget:
+
+
+<RegisterScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 0.94, 0.91, 0.98, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(25)
+        spacing: dp(12)
+
+        Widget:
+
+        Label:
+            text: "BUAT ACCOUNT"
+            color: 0.45, 0.27, 0.68, 1
+            font_size: "26sp"
+            bold: True
+            size_hint_y: None
+            height: dp(50)
+
+        InputBox:
+            id: username
+            hint_text: "Username"
+
+        InputBox:
+            id: password
+            hint_text: "Password"
+            password: True
+
+        InputBox:
+            id: confirm
+            hint_text: "Konfirmasi Password"
+            password: True
+
+        MainButton:
+            text: "DAFTAR"
+            on_release: root.register_account()
+
+        Button:
+            text: "Kembali ke Login"
+            background_normal: ""
+            background_color: 0, 0, 0, 0
+            color: 0.45, 0.27, 0.68, 1
+            size_hint_y: None
+            height: dp(42)
+            on_release: app.root.current = "login"
+
+        Widget:
+
+
+<DashboardScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 0.94, 0.91, 0.98, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(16)
+        spacing: dp(10)
+
+        # HEADER
+        BoxLayout:
+            size_hint_y: None
+            height: dp(80)
+
+            BoxLayout:
+                orientation: "vertical"
+
+                Label:
+                    text: "TABUNGYUK"
+                    color: 0.45, 0.27, 0.68, 1
+                    font_size: "21sp"
+                    bold: True
+                    halign: "left"
+                    text_size: self.size
+
+                Label:
+                    text: "Halo, " + app.current_user["username"] if app.current_user else "Halo"
+                    color: 0.25, 0.20, 0.32, 1
+                    font_size: "23sp"
+                    bold: True
+                    halign: "left"
+                    text_size: self.size
+
+                Label:
+                    text: "Yuk, wujudkan impianmu!"
+                    color: 0.50, 0.40, 0.63, 1
+                    font_size: "12sp"
+                    halign: "left"
+                    text_size: self.size
+
+        # TAB
+        BoxLayout:
+            size_hint_y: None
+            height: dp(48)
+            spacing: dp(6)
+
+            Button:
+                text: "Berlangsung"
+                background_normal: ""
+                background_color: 0.88, 0.80, 0.95, 1
+                color: 0.45, 0.27, 0.68, 1
+                bold: True
+                on_release: root.show_ongoing()
+
+            Button:
+                text: "Tercapai"
+                background_normal: ""
+                background_color: 0.88, 0.80, 0.95, 1
+                color: 0.45, 0.27, 0.68, 1
+                bold: True
+                on_release: root.show_completed()
+
+        # DAFTAR
+        ScrollView:
+            do_scroll_x: False
+
+            BoxLayout:
+                id: goal_box
+                orientation: "vertical"
+                spacing: dp(12)
+                padding: dp(2)
+                size_hint_y: None
+                height: self.minimum_height
+
+        MainButton:
+            text: "+   TAMBAH CELENGAN"
+            on_release: app.root.current = "add_goal"
+
+        # NAVIGASI
+        BoxLayout:
+            size_hint_y: None
+            height: dp(58)
+            spacing: dp(8)
+
+            NavButton:
+                text: "Beranda"
+                on_release: app.root.current = "dashboard"
+
+            NavButton:
+                text: "Account"
+                on_release: app.root.current = "settings"
+
+
+<AddGoalScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 0.94, 0.91, 0.98, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(18)
+        spacing: dp(12)
+
+        Label:
+            text: "Tambah Celengan"
+            color: 0.25, 0.18, 0.35, 1
+            font_size: "24sp"
+            bold: True
+            size_hint_y: None
+            height: dp(45)
+
+        InputBox:
+            id: name
+            hint_text: "Nama celengan"
+
+        InputBox:
+            id: target
+            hint_text: "Target tabungan"
+            input_filter: "int"
+
+        Button:
+            text: "Pilih Foto"
+            background_normal: ""
+            background_color: 0.86, 0.80, 0.94, 1
+            color: 0.35, 0.22, 0.50, 1
+            bold: True
+            size_hint_y: None
+            height: dp(48)
+            on_release: root.choose_image()
+
+        Label:
+            id: image_label
+            text: "Belum ada gambar"
+            color: 0.50, 0.40, 0.60, 1
+            size_hint_y: None
+            height: dp(30)
+            shorten: True
+
+        Widget:
+
+        MainButton:
+            text: "SIMPAN CELENGAN"
+            on_release: root.save_goal()
+
+        Button:
+            text: "Kembali"
+            background_normal: ""
+            background_color: 0.86, 0.80, 0.94, 1
+            color: 0.35, 0.22, 0.50, 1
+            size_hint_y: None
+            height: dp(45)
+            on_release: app.root.current = "dashboard"
+
+
+<GoalScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 0.94, 0.91, 0.98, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(18)
+        spacing: dp(8)
+
+        Label:
+            id: goal_name
+            text: "Celengan"
+            color: 0.25, 0.18, 0.35, 1
+            font_size: "24sp"
+            bold: True
+            size_hint_y: None
+            height: dp(38)
+
+        # FOTO DI TENGAH
+        BoxLayout:
+            size_hint_y: None
+            height: dp(190)
+            padding: dp(20)
+
+            Image:
+                id: goal_image
+                allow_stretch: True
+                keep_ratio: True
+
+        Label:
+            id: goal_total
+            text: "Rp0"
+            color: 0.45, 0.27, 0.65, 1
+            font_size: "25sp"
+            bold: True
+            size_hint_y: None
+            height: dp(38)
+            halign: "left"
+            text_size: self.size
+
+        Label:
+            id: goal_target
+            text: "Target: Rp0"
+            color: 0.40, 0.33, 0.48, 1
+            size_hint_y: None
+            height: dp(28)
+            halign: "left"
+            text_size: self.size
+
+        Label:
+            id: goal_percent
+            text: "0% tercapai"
+            color: 0.45, 0.27, 0.65, 1
+            bold: True
+            size_hint_y: None
+            height: dp(28)
+            halign: "right"
+            text_size: self.size
+
+        Label:
+            id: goal_remaining
+            text: "Sisa: Rp0"
+            color: 0.40, 0.33, 0.48, 1
+            bold: True
+            size_hint_y: None
+            height: dp(28)
+
+        Label:
+            text: "Riwayat Tabungan"
+            color: 0.25, 0.18, 0.35, 1
+            bold: True
+            size_hint_y: None
+            height: dp(30)
+
+        ScrollView:
+            do_scroll_x: False
+
+            BoxLayout:
+                id: history_box
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+
+        InputBox:
+            id: amount
+            hint_text: "Nominal menabung"
+            input_filter: "int"
+
+        InputBox:
+            id: note
+            hint_text: "Keterangan"
+
+        MainButton:
+            text: "+ TAMBAH TABUNGAN"
+            on_release: root.add_saving()
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(45)
+            spacing: dp(6)
+
+            Button:
+                text: "Hapus"
+                background_normal: ""
+                background_color: 0.80, 0.35, 0.45, 1
+                color: 1, 1, 1, 1
+                bold: True
+                on_release: root.delete_goal()
+
+            Button:
+                text: "Kembali"
+                background_normal: ""
+                background_color: 0.86, 0.80, 0.94, 1
+                color: 0.35, 0.22, 0.50, 1
+                on_release: app.root.current = "dashboard"
+
+
+<SettingsScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 0.94, 0.91, 0.98, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(20)
+        spacing: dp(12)
+
+        Label:
+            text: "ACCOUNT"
+            color: 0.45, 0.27, 0.68, 1
+            font_size: "25sp"
+            bold: True
+            size_hint_y: None
+            height: dp(45)
+
+        # FOTO PROFIL
+        BoxLayout:
+            size_hint_y: None
+            height: dp(150)
+            padding: dp(30)
+
+            Image:
+                id: profile_image
+                allow_stretch: True
+                keep_ratio: True
+
+        Label:
+            id: account_name
+            text: "Username"
+            color: 0.25, 0.18, 0.35, 1
+            font_size: "20sp"
+            bold: True
+            size_hint_y: None
+            height: dp(35)
+
+        Button:
+            text: "Ganti Foto Profil"
+            background_normal: ""
+            background_color: 0.86, 0.80, 0.94, 1
+            color: 0.35, 0.22, 0.50, 1
+            bold: True
+            size_hint_y: None
+            height: dp(48)
+            on_release: root.choose_profile()
+
+        Widget:
+
+        MainButton:
+            text: "LOGOUT"
+            on_release: root.logout()
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(58)
+            spacing: dp(8)
+
+            NavButton:
+                text: "Beranda"
+                on_release: app.root.current = "dashboard"
+
+            NavButton:
+                text: "Account"
+                on_release: app.root.current = "settings"
