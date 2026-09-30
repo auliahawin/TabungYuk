@@ -1,37 +1,72 @@
-[app]
+name: Build TabungYuk APK
 
-title = TabungYuk
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-package.name = tabungyuk
+env:
+  PYTHONFORANDROID_PREREQUISITES_INSTALL_INTERACTIVE: "0"
 
-package.domain = org.tabungyuk
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
 
-source.dir = .
+    steps:
 
-source.include_exts = py,kv,png,jpg,jpeg,db
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-version = 1.0
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-requirements = python3,kivy
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
 
-orientation = portrait
+      - name: Install Linux dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            git \
+            zip \
+            unzip \
+            autoconf \
+            automake \
+            libtool \
+            libltdl-dev \
+            pkg-config \
+            zlib1g-dev \
+            libncurses5-dev \
+            libncursesw5-dev \
+            cmake \
+            libffi-dev \
+            libssl-dev
 
-fullscreen = 0
+      - name: Install Buildozer
+        run: |
+          python -m pip install --upgrade pip
+          pip install buildozer cython
 
+      - name: Accept Android SDK licenses
+        run: |
+          mkdir -p ~/.buildozer
+          mkdir -p ~/.android
+          yes | sdkmanager --licenses || true
 
-[buildozer]
+      - name: Build APK
+        run: |
+          buildozer android debug
 
-log_level = 2
-
-warn_on_root = 1
-
-
-[app:android]
-
-android.api = 35
-
-android.minapi = 24
-
-android.archs = arm64-v8a
-
-android.debug_artifact = apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TabungYuk-APK
+          path: bin/*.apk
+          if-no-files-found: error
